@@ -1,0 +1,14 @@
+<footer class="td-footer row d-print-none">
+  <div class="container-fluid">
+    <div class="row mx-md-2">
+      <div class="td-footer__left col-6 col-sm-4 order-sm-1">
+      </div><div class="td-footer__right col-6 col-sm-4 order-sm-3">
+      </div><div class="td-footer__center col-12 col-sm-4 py-2 order-sm-2">
+        <span class="td-footer__license">MIT License</span>
+        {{ if .Site.Params.lastUpdate }}
+        <br><small class="text-muted">Last updated: {{ .Site.Params.lastUpdate }}</small>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</footer>

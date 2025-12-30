@@ -1,0 +1,14 @@
+{
+  "name": "ai-config",
+  "version": "1.0.0",
+  "description": "AI Config Hugo site",
+  "scripts": {
+    "build": "hugo --gc --minify",
+    "dev": "hugo server"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "postcss-cli": "^11.0.0"
+  }
+}

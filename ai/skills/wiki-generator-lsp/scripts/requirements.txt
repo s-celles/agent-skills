@@ -1,0 +1,20 @@
+# Wiki Generator LSP - Python Dependencies
+# No external dependencies required - uses only Python standard library
+
+# The scripts use:
+# - json (stdlib)
+# - subprocess (stdlib)
+# - sys, os, re, time, socket (stdlib)
+# - pathlib (stdlib)
+# - dataclasses (stdlib, Python 3.7+)
+# - typing (stdlib)
+# - argparse (stdlib)
+
+# External requirements (not pip-installable):
+# - Language Server Protocol servers for code analysis:
+#   - TypeScript/JavaScript: typescript-language-server (npm install -g typescript-language-server typescript)
+#   - Python: pylsp (pip install python-lsp-server)
+#   - Go: gopls (go install golang.org/x/tools/gopls@latest)
+#   - Rust: rust-analyzer (rustup component add rust-analyzer)
+#   - Java: jdtls (Eclipse JDT Language Server)
+#   - C/C++: clangd (apt install clangd or brew install llvm)

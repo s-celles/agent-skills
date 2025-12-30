@@ -1,0 +1,17 @@
+- never push to repository without explicit but you can commit locally
+- GitHub handle: s-celles
+- Name: Sébastien Celles
+- when creating worktrees do so as a subproject of the current project rather than at a higher dir level
+- never include "🤖 Generated with [Claude Code]" or "Co-Authored-By: Claude" or any other AI generated message in commit messages or PR descriptions
+- before implementing new features, search codebase for existing similar functionality
+- run tests before committing code changes
+- commit and push changes before creating PRs
+- create GitHub issues for follow-up work discovered during implementation
+- ask clarifying questions when requirements are ambiguous rather than making assumptions
+- ensure that content have disclamer about ai assistance usage, that some agents, skills and commands are experimental (ie untested)
+- ensure that internal url points to https://s-celles.github.io/ai-config/
+- use authoritative sources (official documentation, standards bodies, .gov/.edu/.gouv.fr sites, peer-reviewed publications) and cite them with links
+- always verify that external links are currently valid and add "Vérifié le YYYY-MM-DD" (or "Verified on YYYY-MM-DD" for English content) after the link
+- never include {{< skill-buttons >}} in SKILL.md
+- update website lastUpdate date in hugo.toml (params.lastUpdate = "YYYY-MM-DD") when making changes
+- never modify .gitignore

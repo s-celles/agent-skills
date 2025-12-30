@@ -1,0 +1,71 @@
+# AI Config
+
+> A collection of AI/LLM configuration files and agent skills for various tools and platforms.
+
+This site documents standards for sharing AI agents and skills, and provides a collection of ready-to-use agent skills.
+
+## Main Sections
+
+- [Documentation](https://s-celles.github.io/ai-config/docs/): Overview of AI agent and skill sharing standards
+- [Skills](https://s-celles.github.io/ai-config/docs/skills/): Collection of agent skills for various tasks
+
+## Standards Documented
+
+### Agent Standards
+- AGENTS.md: Project-specific guidance for AI coding agents (OpenAI/AAIF standard)
+- Agent Manifest: Describes autonomous AI agent capabilities (manifest.json)
+- Open Agent Specification: Framework-agnostic declarative agent specification
+- OASF: Open Agentic Schema Framework for agent interoperability
+
+### Skill Standards
+- Agent Skills (SKILL.md): Human-readable skill instructions for AI assistants
+- Skill Manifest: Bot skills with endpoints and I/O schemas (Microsoft Bot Framework)
+- GPT Actions: API integration for ChatGPT custom GPTs (OpenAPI 3.1.0)
+
+### Context & Communication Protocols
+- MCP: Model Context Protocol for agent-to-tool communication
+- llms.txt: Website content structured for LLM consumption
+
+### Knowledge Standards
+- IEEE 3404-2025: Standard for data and model sharing between federated ML systems
+- A2A Protocol: Google's Agent-to-Agent protocol for agent discovery and knowledge exchange
+- ISO/IEC 22989: AI concepts and terminology standard
+- ISO/IEC 42001: AI management system requirements
+- RAG Patterns: Retrieval-Augmented Generation for knowledge integration (de facto practices)
+
+## Available Skills
+
+### Documentation
+- wiki-generator-lsp: Generate comprehensive WIKI.md documentation for codebases using LSP for precise code analysis. Supports TypeScript, JavaScript, Python, Go, Rust, Java, and C/C++.
+
+### Legal
+- license-advisor: Expert assistant helping users choose the most suitable license for their creations. Covers open-source, Creative Commons, proprietary, public domain, and dual licensing.
+- foss-license-advisor: Expert assistant specialized in free and open-source licenses (FOSS). Covers GPL, MIT, Apache, BSD, LGPL, MPL, AGPL, and Creative Commons free licenses.
+
+## Skill URLs (Website)
+
+- https://s-celles.github.io/ai-config/docs/skills/wiki-generator-lsp/
+- https://s-celles.github.io/ai-config/docs/skills/license-advisor/
+- https://s-celles.github.io/ai-config/docs/skills/foss-license-advisor/
+
+## Raw SKILL.md Files (for direct LLM consumption)
+
+- https://raw.githubusercontent.com/s-celles/ai-config/main/ai/skills/wiki-generator-lsp/SKILL.md
+- https://raw.githubusercontent.com/s-celles/ai-config/main/ai/skills/license-advisor/SKILL.md
+- https://raw.githubusercontent.com/s-celles/ai-config/main/ai/skills/foss-license-advisor/SKILL.md
+- https://raw.githubusercontent.com/s-celles/ai-config/main/ai/skills/tuteur-info-geii/SKILL.md
+
+## Repository
+
+Source code: https://github.com/s-celles/ai-config
+License: MIT
+
+## Disclaimer
+
+This content was created with AI assistance (Claude Opus 4.5). AI systems can make mistakes, including factual errors, hallucinations, and outdated information. Some agents, skills, and commands are experimental and have not been fully tested.
+
+Always verify information from authoritative sources:
+- Licensing: https://opensource.org/licenses or https://creativecommons.org/licenses/
+- Legal matters: consult qualified legal professionals
+
+This is for informational and educational purposes only and does not constitute professional advice. Use at your own risk.

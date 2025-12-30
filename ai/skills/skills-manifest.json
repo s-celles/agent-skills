@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "manifestVersion": "1.0.0",
+  "repository": {
+    "name": "agent-skills",
+    "description": "A collection of agent skills for Claude Code and compatible AI assistants",
+    "license": "MIT",
+    "url": "https://github.com/scelles/agent-skills"
+  },
+  "skills": [
+    {
+      "id": "wiki-generator-lsp",
+      "name": "Wiki Generator with LSP",
+      "version": "1.0.0",
+      "description": "Generate comprehensive WIKI.md documentation for any codebase using LSP for precise code analysis.",
+      "category": "documentation",
+      "status": "tested",
+      "languages": ["en"],
+      "keywords": ["documentation", "wiki", "lsp", "code-analysis", "mermaid", "architecture"],
+      "path": "wiki-generator-lsp/",
+      "hasScripts": true,
+      "templateCount": 1
+    },
+    {
+      "id": "license-advisor",
+      "name": "License Advisor",
+      "version": "1.0.0",
+      "description": "Expert assistant for choosing the right license for any type of creation.",
+      "category": "legal",
+      "status": "tested",
+      "languages": ["multilingual"],
+      "keywords": ["licensing", "intellectual-property", "copyright", "creative-commons", "open-source", "proprietary"],
+      "path": "license-advisor/",
+      "hasScripts": false,
+      "templateCount": 3,
+      "related": ["foss-license-advisor"]
+    },
+    {
+      "id": "foss-license-advisor",
+      "name": "FOSS License Advisor",
+      "version": "1.0.0",
+      "description": "Expert assistant specialized in free and open-source licenses (FOSS).",
+      "category": "legal",
+      "status": "tested",
+      "languages": ["multilingual"],
+      "keywords": ["foss", "open-source", "free-software", "gpl", "mit", "apache", "copyleft", "creative-commons"],
+      "path": "foss-license-advisor/",
+      "hasScripts": false,
+      "templateCount": 3,
+      "related": ["license-advisor"]
+    },
+    {
+      "id": "thesis-assistant",
+      "name": "PhD Thesis Assistant",
+      "version": "1.0.0",
+      "description": "PhD thesis writing assistant providing guidance on academic writing, thesis structure, and defense preparation.",
+      "category": "academic",
+      "status": "experimental",
+      "languages": ["en"],
+      "keywords": ["thesis", "phd", "dissertation", "academic-writing", "literature-review", "defense"],
+      "path": "thesis-assistant/",
+      "hasScripts": false,
+      "templateCount": 6,
+      "related": ["these-scientifique-fr"]
+    },
+    {
+      "id": "these-scientifique-fr",
+      "name": "Assistant Thèse Scientifique Française",
+      "version": "1.0.0",
+      "description": "Assistant pour la rédaction de thèse scientifique dans le contexte académique français.",
+      "category": "academic",
+      "status": "experimental",
+      "languages": ["fr"],
+      "keywords": ["these", "doctorat", "redaction-scientifique", "france", "ecole-doctorale", "soutenance"],
+      "path": "these-scientifique-fr/",
+      "hasScripts": false,
+      "templateCount": 6,
+      "related": ["thesis-assistant"]
+    }
+  ],
+  "categories": {
+    "documentation": "Skills for generating or managing documentation",
+    "legal": "Skills related to licensing, copyright, and intellectual property",
+    "academic": "Skills for academic writing and research"
+  },
+  "statuses": {
+    "tested": "Skill has been tested and is considered stable",
+    "experimental": "Skill is under development or has not been thoroughly tested"
+  }
+}

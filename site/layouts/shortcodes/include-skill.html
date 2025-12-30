@@ -1,0 +1,8 @@
+{{/* Include content from SKILL.md in the same directory */}}
+{{ $skillPath := printf "%s/SKILL.md" .Page.File.Dir }}
+{{ $skill := .Page.Resources.GetMatch "SKILL.md" }}
+{{ if $skill }}
+  {{ $skill.Content | safeHTML }}
+{{ else }}
+  <p>SKILL.md not found</p>
+{{ end }}

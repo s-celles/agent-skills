@@ -1,0 +1,560 @@
+{{/* Skill buttons for copying and opening in LLMs */}}
+{{ $skillName := .Page.File.Dir | replaceRE ".*skills/" "" | replaceRE "/$" "" }}
+{{ $rawUrl := printf "https://raw.githubusercontent.com/s-celles/ai-config/main/ai/skills/%s/SKILL.md" $skillName }}
+{{ $folderUrl := printf "https://github.com/s-celles/ai-config/tree/main/ai/skills/%s" $skillName }}
+{{ $apiUrl := printf "https://api.github.com/repos/s-celles/ai-config/contents/ai/skills/%s" $skillName }}
+
+<div class="skill-buttons" style="margin: 1.5rem 0;">
+  <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+    <button onclick="copySkillFromUrl(event, '{{ $rawUrl }}')" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+      <i class="fa fa-copy"></i> Copy Skill
+    </button>
+    <button onclick="copyFullSkill(event, '{{ $apiUrl }}')" class="btn btn-success" style="display: inline-flex; align-items: center; gap: 0.5rem;" title="Copy skill + all reference templates">
+      <i class="fa fa-files-o"></i> Copy All (with references)
+    </button>
+    <a href="{{ $folderUrl }}" target="_blank" rel="noopener" class="btn btn-outline-info" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+      <i class="fa fa-folder-open"></i> View on GitHub
+    </a>
+    <button onclick="openTryModal('{{ $rawUrl }}')" class="btn btn-warning" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+      <i class="fa fa-play"></i> Try this Skill
+    </button>
+  </div>
+</div>
+
+<!-- Modal for trying skill on various LLMs -->
+<div id="trySkillModal" class="skill-modal" style="display: none;">
+  <div class="skill-modal-backdrop" onclick="closeTryModal()"></div>
+  <div class="skill-modal-content">
+    <div class="skill-modal-header">
+      <h3 style="margin: 0;">Try this Skill</h3>
+      <button onclick="closeTryModal()" class="skill-modal-close">&times;</button>
+    </div>
+    <div class="skill-modal-body">
+      <p style="margin-bottom: 1rem; color: #666;">Choose an AI assistant to try this skill. The skill will be sent as instructions.</p>
+
+      <h4 style="margin: 1rem 0 0.5rem; font-size: 0.9rem; color: #888; text-transform: uppercase;">Free (no account required)</h4>
+      <div class="llm-options">
+        <button onclick="tryOnHuggingChat()" class="llm-option">
+          <span class="llm-icon">🤗</span>
+          <span class="llm-name">HuggingChat</span>
+          <span class="llm-tag free">Free</span>
+        </button>
+        <button onclick="tryOnDuckDuckGo()" class="llm-option">
+          <span class="llm-icon">🦆</span>
+          <span class="llm-name">DuckDuckGo AI</span>
+          <span class="llm-tag free">Free</span>
+        </button>
+      </div>
+
+      <h4 style="margin: 1rem 0 0.5rem; font-size: 0.9rem; color: #888; text-transform: uppercase;">Free tier available</h4>
+      <div class="llm-options">
+        <button onclick="tryOnClaude()" class="llm-option">
+          <span class="llm-icon">🟠</span>
+          <span class="llm-name">Claude</span>
+          <span class="llm-tag freemium">Freemium</span>
+        </button>
+        <button onclick="tryOnChatGPT()" class="llm-option">
+          <span class="llm-icon">🟢</span>
+          <span class="llm-name">ChatGPT</span>
+          <span class="llm-tag freemium">Freemium</span>
+        </button>
+        <button onclick="tryOnGemini()" class="llm-option">
+          <span class="llm-icon">🔵</span>
+          <span class="llm-name">Gemini</span>
+          <span class="llm-tag freemium">Freemium</span>
+        </button>
+        <button onclick="tryOnMistral()" class="llm-option">
+          <span class="llm-icon">🟣</span>
+          <span class="llm-name">Mistral AI (Le Chat)</span>
+          <span class="llm-tag freemium">Freemium</span>
+        </button>
+        <button onclick="tryOnPoe()" class="llm-option">
+          <span class="llm-icon">⚡</span>
+          <span class="llm-name">Poe</span>
+          <span class="llm-tag freemium">Freemium</span>
+        </button>
+        <button onclick="tryOnPerplexity()" class="llm-option">
+          <span class="llm-icon">🔍</span>
+          <span class="llm-name">Perplexity</span>
+          <span class="llm-tag freemium">Freemium</span>
+        </button>
+        <button onclick="tryOnGoogleAI()" class="llm-option">
+          <span class="llm-icon">🧪</span>
+          <span class="llm-name">Google AI Studio</span>
+          <span class="llm-tag freemium">Freemium</span>
+        </button>
+      </div>
+
+      <h4 style="margin: 1rem 0 0.5rem; font-size: 0.9rem; color: #888; text-transform: uppercase;">Other options</h4>
+      <div class="llm-options">
+        <button onclick="tryOnCohere()" class="llm-option">
+          <span class="llm-icon">🔶</span>
+          <span class="llm-name">Cohere (Coral)</span>
+          <span class="llm-tag freemium">Freemium</span>
+        </button>
+        <button onclick="tryOnYou()" class="llm-option">
+          <span class="llm-icon">🔎</span>
+          <span class="llm-name">You.com</span>
+          <span class="llm-tag freemium">Freemium</span>
+        </button>
+        <button onclick="copyAndManual()" class="llm-option">
+          <span class="llm-icon">📋</span>
+          <span class="llm-name">Copy & use manually</span>
+          <span class="llm-tag">Any LLM</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.skill-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skill-modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.skill-modal-content {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.skill-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.skill-modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  line-height: 1;
+}
+
+.skill-modal-close:hover {
+  color: #333;
+}
+
+.skill-modal-body {
+  padding: 1rem 1.5rem 1.5rem;
+}
+
+.llm-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.5rem;
+}
+
+.llm-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.llm-option:hover {
+  border-color: #007bff;
+  background: #f8f9ff;
+}
+
+.llm-icon {
+  font-size: 1.2rem;
+}
+
+.llm-name {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.llm-tag {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  background: #eee;
+  color: #666;
+}
+
+.llm-tag.free {
+  background: #d4edda;
+  color: #155724;
+}
+
+.llm-tag.freemium {
+  background: #fff3cd;
+  color: #856404;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .skill-modal-content {
+    background: #1e1e1e;
+    color: #fff;
+  }
+
+  .skill-modal-header {
+    border-bottom-color: #333;
+  }
+
+  .skill-modal-close {
+    color: #aaa;
+  }
+
+  .skill-modal-close:hover {
+    color: #fff;
+  }
+
+  .skill-modal-body p {
+    color: #aaa !important;
+  }
+
+  .llm-option {
+    background: #2d2d2d;
+    border-color: #444;
+    color: #fff;
+  }
+
+  .llm-option:hover {
+    border-color: #007bff;
+    background: #333;
+  }
+}
+</style>
+
+<script>
+let currentSkillUrl = '';
+
+function openTryModal(rawUrl) {
+  currentSkillUrl = rawUrl;
+  document.getElementById('trySkillModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeTryModal() {
+  document.getElementById('trySkillModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// Close modal on escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeTryModal();
+  }
+});
+
+function cleanSkillContent(content) {
+  // Remove YAML frontmatter
+  content = content.replace(/^---[\s\S]*?---\s*/, '');
+  // Remove the skill-buttons shortcode
+  content = content.replace(/\{\{<\s*skill-buttons\s*>\}\}\s*/, '');
+  return content.trim();
+}
+
+async function fetchAndCleanSkill(url) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error('Failed to fetch');
+  let content = await response.text();
+  return cleanSkillContent(content);
+}
+
+function getPromptPrefix() {
+  return 'Please read and follow these instructions as your system prompt:\n\n';
+}
+
+function getPromptSuffix() {
+  return '\n\nNow greet me and explain briefly what you can help me with.';
+}
+
+async function tryOnHuggingChat() {
+  try {
+    const content = await fetchAndCleanSkill(currentSkillUrl);
+    const prompt = getPromptPrefix() + content + getPromptSuffix();
+    window.open(`https://huggingface.co/chat/?q=${encodeURIComponent(prompt)}`, '_blank');
+    closeTryModal();
+  } catch (err) {
+    console.error('Failed:', err);
+    alert('Failed to load skill. Please try again.');
+  }
+}
+
+async function tryOnDuckDuckGo() {
+  try {
+    const content = await fetchAndCleanSkill(currentSkillUrl);
+    const prompt = getPromptPrefix() + content + getPromptSuffix();
+    window.open(`https://duckduckgo.com/?q=${encodeURIComponent(prompt)}&ia=chat`, '_blank');
+    closeTryModal();
+  } catch (err) {
+    console.error('Failed:', err);
+    alert('Failed to load skill. Please try again.');
+  }
+}
+
+async function tryOnClaude() {
+  try {
+    const content = await fetchAndCleanSkill(currentSkillUrl);
+    const prompt = getPromptPrefix() + content + getPromptSuffix();
+    // Claude doesn't support pre-filled prompts, copy to clipboard and open
+    await navigator.clipboard.writeText(prompt);
+    window.open('https://claude.ai/new', '_blank');
+    closeTryModal();
+    alert('Skill copied to clipboard! Paste it in Claude to start.');
+  } catch (err) {
+    console.error('Failed:', err);
+    alert('Failed to load skill. Please try again.');
+  }
+}
+
+async function tryOnChatGPT() {
+  try {
+    const content = await fetchAndCleanSkill(currentSkillUrl);
+    const prompt = getPromptPrefix() + content + getPromptSuffix();
+    // ChatGPT supports pre-filled prompts via URL
+    window.open(`https://chatgpt.com/?q=${encodeURIComponent(prompt)}`, '_blank');
+    closeTryModal();
+  } catch (err) {
+    console.error('Failed:', err);
+    alert('Failed to load skill. Please try again.');
+  }
+}
+
+async function tryOnGemini() {
+  try {
+    const content = await fetchAndCleanSkill(currentSkillUrl);
+    const prompt = getPromptPrefix() + content + getPromptSuffix();
+    // Gemini doesn't support pre-filled prompts, copy to clipboard
+    await navigator.clipboard.writeText(prompt);
+    window.open('https://gemini.google.com/app', '_blank');
+    closeTryModal();
+    alert('Skill copied to clipboard! Paste it in Gemini to start.');
+  } catch (err) {
+    console.error('Failed:', err);
+    alert('Failed to load skill. Please try again.');
+  }
+}
+
+async function tryOnMistral() {
+  try {
+    const content = await fetchAndCleanSkill(currentSkillUrl);
+    const prompt = getPromptPrefix() + content + getPromptSuffix();
+    // Mistral Le Chat - copy to clipboard
+    await navigator.clipboard.writeText(prompt);
+    window.open('https://chat.mistral.ai/chat', '_blank');
+    closeTryModal();
+    alert('Skill copied to clipboard! Paste it in Le Chat to start.');
+  } catch (err) {
+    console.error('Failed:', err);
+    alert('Failed to load skill. Please try again.');
+  }
+}
+
+async function tryOnPoe() {
+  try {
+    const content = await fetchAndCleanSkill(currentSkillUrl);
+    const prompt = getPromptPrefix() + content + getPromptSuffix();
+    window.open(`https://poe.com/chat?message=${encodeURIComponent(prompt)}`, '_blank');
+    closeTryModal();
+  } catch (err) {
+    console.error('Failed:', err);
+    alert('Failed to load skill. Please try again.');
+  }
+}
+
+async function tryOnPerplexity() {
+  try {
+    const content = await fetchAndCleanSkill(currentSkillUrl);
+    const prompt = getPromptPrefix() + content + getPromptSuffix();
+    window.open(`https://www.perplexity.ai/?q=${encodeURIComponent(prompt)}`, '_blank');
+    closeTryModal();
+  } catch (err) {
+    console.error('Failed:', err);
+    alert('Failed to load skill. Please try again.');
+  }
+}
+
+async function tryOnGoogleAI() {
+  try {
+    const content = await fetchAndCleanSkill(currentSkillUrl);
+    const prompt = getPromptPrefix() + content + getPromptSuffix();
+    window.open(`https://aistudio.google.com/app/prompts/new_chat?pli=1&q=${encodeURIComponent(prompt)}`, '_blank');
+    closeTryModal();
+  } catch (err) {
+    console.error('Failed:', err);
+    alert('Failed to load skill. Please try again.');
+  }
+}
+
+async function tryOnCohere() {
+  try {
+    const content = await fetchAndCleanSkill(currentSkillUrl);
+    const prompt = getPromptPrefix() + content + getPromptSuffix();
+    await navigator.clipboard.writeText(prompt);
+    window.open('https://coral.cohere.com/', '_blank');
+    closeTryModal();
+    alert('Skill copied to clipboard! Paste it in Coral to start.');
+  } catch (err) {
+    console.error('Failed:', err);
+    alert('Failed to load skill. Please try again.');
+  }
+}
+
+async function tryOnYou() {
+  try {
+    const content = await fetchAndCleanSkill(currentSkillUrl);
+    const prompt = getPromptPrefix() + content + getPromptSuffix();
+    window.open(`https://you.com/search?q=${encodeURIComponent(prompt)}&tbm=youchat`, '_blank');
+    closeTryModal();
+  } catch (err) {
+    console.error('Failed:', err);
+    alert('Failed to load skill. Please try again.');
+  }
+}
+
+async function copyAndManual() {
+  try {
+    const content = await fetchAndCleanSkill(currentSkillUrl);
+    const prompt = getPromptPrefix() + content + getPromptSuffix();
+    await navigator.clipboard.writeText(prompt);
+    closeTryModal();
+    alert('Skill copied to clipboard! You can now paste it in any AI assistant.');
+  } catch (err) {
+    console.error('Failed:', err);
+    alert('Failed to copy skill. Please try again.');
+  }
+}
+
+async function copySkillFromUrl(event, url) {
+  const btn = event.target.closest('button');
+  const originalText = btn.innerHTML;
+
+  try {
+    btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading...';
+    btn.disabled = true;
+
+    const content = await fetchAndCleanSkill(url);
+    await navigator.clipboard.writeText(content);
+
+    btn.innerHTML = '<i class="fa fa-check"></i> Copied!';
+    btn.classList.remove('btn-primary');
+    btn.classList.add('btn-success');
+
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.classList.remove('btn-success');
+      btn.classList.add('btn-primary');
+      btn.disabled = false;
+    }, 2000);
+  } catch (err) {
+    console.error('Failed to copy:', err);
+    btn.innerHTML = '<i class="fa fa-times"></i> Failed';
+    btn.classList.remove('btn-primary');
+    btn.classList.add('btn-danger');
+
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.classList.remove('btn-danger');
+      btn.classList.add('btn-primary');
+      btn.disabled = false;
+    }, 2000);
+  }
+}
+
+async function copyFullSkill(event, apiUrl) {
+  const btn = event.target.closest('button');
+  const originalText = btn.innerHTML;
+
+  try {
+    btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading...';
+    btn.disabled = true;
+
+    // Get directory listing from GitHub API
+    const response = await fetch(apiUrl);
+    if (!response.ok) throw new Error('Failed to fetch directory listing');
+
+    const files = await response.json();
+    let allContent = '';
+
+    // Process each file
+    for (const file of files) {
+      if (file.type === 'file' && file.name.endsWith('.md')) {
+        const fileResponse = await fetch(file.download_url);
+        if (fileResponse.ok) {
+          let content = await fileResponse.text();
+          content = cleanSkillContent(content);
+          allContent += `\n\n---\n# File: ${file.name}\n---\n\n${content}`;
+        }
+      } else if (file.type === 'dir' && file.name === 'references') {
+        // Fetch references directory
+        const refResponse = await fetch(file.url);
+        if (refResponse.ok) {
+          const refFiles = await refResponse.json();
+          for (const refFile of refFiles) {
+            if (refFile.type === 'file' && refFile.name.endsWith('.md')) {
+              const refFileResponse = await fetch(refFile.download_url);
+              if (refFileResponse.ok) {
+                let content = await refFileResponse.text();
+                content = cleanSkillContent(content);
+                allContent += `\n\n---\n# Reference: ${refFile.name}\n---\n\n${content}`;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    allContent = allContent.trim();
+    await navigator.clipboard.writeText(allContent);
+
+    btn.innerHTML = '<i class="fa fa-check"></i> Copied!';
+
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }, 2000);
+  } catch (err) {
+    console.error('Failed to copy:', err);
+    btn.innerHTML = '<i class="fa fa-times"></i> Failed';
+    btn.classList.remove('btn-success');
+    btn.classList.add('btn-danger');
+
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.classList.remove('btn-danger');
+      btn.classList.add('btn-success');
+      btn.disabled = false;
+    }, 2000);
+  }
+}
+</script>
